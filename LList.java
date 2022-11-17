@@ -57,8 +57,15 @@ public class LList<T> {
             Node<T> temp=head;
             for(int i=0;i<pos ;i++){
                 temp=temp.getNext();
+                System.out.println(i);
             }
+            System.out.println("SDF"+temp.getData());
+            Node<T> temp2 = new Node<T>();
+            temp2.setData(m);
+            temp2.setNext(temp.getNext()); 
+            temp.setNext(temp);
             
+
             counter++;
         }catch(OutOfMemoryError e){
             throw new ListException("Error. Out of Memory.");
