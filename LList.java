@@ -1,21 +1,3 @@
-/* TOD0
- * equals
- * isEmpty
- * toArray
- * clear
- * remove/delete (i think is done)
- * getCapcity
- * size 
- * find
- * get
- * add(insert)
- * resize
- */
-/* Done
- * add
- * delete
- * 
- */
 public class LList<T> {
     private Node<T> head;
     private Node<T> tail;
@@ -24,6 +6,27 @@ public class LList<T> {
         head = null;
         tail = null;
         counter = 0;
+    }
+    public Object[] toArray(){
+        Object[] output= new Object[counter];
+        Node<T> temp = head;
+        int c = 0;
+        while(temp!=null){
+            output[c] = temp.getData();
+            c++;
+            temp=temp.getNext();
+        }
+        return output;
+    }
+    public void clear(){
+        head = null;
+        tail = null;
+    }
+    public boolean isEmpty(){
+        if(head==null){
+            return true;
+        }
+        return false;
     }
     public void add(T m)throws ListException{
         try{
@@ -55,17 +58,14 @@ public class LList<T> {
                 throw new ListException("Error. Unable to insert. List is empty.");
             }
             Node<T> temp=head;
-            for(int i=0;i<pos ;i++){
+            for(int i=0;i<pos-2 ;i++){
                 temp=temp.getNext();
-                System.out.println(i);
             }
-            System.out.println("SDF"+temp.getData());
+  
             Node<T> temp2 = new Node<T>();
             temp2.setData(m);
             temp2.setNext(temp.getNext()); 
-            temp.setNext(temp);
-            
-
+            temp.setNext(temp2);
             counter++;
         }catch(OutOfMemoryError e){
             throw new ListException("Error. Out of Memory.");
@@ -85,15 +85,55 @@ public class LList<T> {
             }
             return t;
         }
-    public T delete(int position) throws ListException{//idk
+        public T get(int position)throws ListException{
+            Node<T> temp=head;
+            if(counter==0){
+                throw new ListException("Cannot get. List is empty");
+            }
+            if(position<0||position>counter){
+                throw new ListException("Cannot get. Bad position");
+            }
+            for(int i= 0;i<position;i++){
+                temp = temp.getNext();
+            }
+            return temp.getData();
+        }
+        public int size(){
+            return counter;
+        }
+        public int find(T item, int startPos, int endPos ) throws ListException{
+            Node<T> temp=head;
+            int count = 0;
+            if (startPos < 1  || endPos> counter) {
+                throw new ListException("Cannot find. Bad Position");
+            }
+            if (counter == 0){
+                throw new ListException("Error. Unable to find. List is empty.");
+            }
+            for(int i= 0;i<startPos;i++){
+                temp=temp.getNext();
+                count++;
+            }
+            for(int i = startPos;i<endPos;i++){
+                temp = temp.getNext();
+                if(temp.getData()==item){
+                    return count;
+                }
+                count++;
+            }
+            return -1; 
+        }
+       
+    public T remove(int position) throws ListException{//removes from a specfic position
         Node<T> current=head;
         Node<T>before=null;
     
-        T temp=null;;
+        T temp=null;
     
         if(counter == 0){
             throw new ListException("cannot Delete. List is empty");
         }
+       
         if(position>=1 && position<=counter){
             if(counter ==1){//there i s only one node
                 temp=head.getData();
@@ -139,9 +179,7 @@ public class LList<T> {
             return temp.getData();
         }
     
-        public int Size(){
-            return counter;
-        }
+       
         public void insert(T item,int position)throws ListException{
             try{
                 if(counter == 0){
@@ -176,5 +214,22 @@ public class LList<T> {
             }
         } 
         
-    
+        public boolean equals(LList<T> other) {
+            if(size()!=other.size()){
+                System.out.println(size()+" "+other.size());
+                return false;
+            }
+            
+                Object[] listOne = other.toArray();
+                Object[] listTwo = toArray();
+                for(int i= 0;i<listOne.length;i++)
+                {
+                    System.out.println(listOne[i]+" "+listTwo[i]);
+                    if(!listOne[i].equals(listTwo[i])){
+                        return false;
+                    }
+                }
+            
+            return true;
+        }   
 }
